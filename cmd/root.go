@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,28 +17,36 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
+	"installTools/internal/version"
 	"os"
+
+	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
 
 var cfgFile string
+var printVersion bool // not using cobra.Command.Version to make it possible to show component versions
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "installTools",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Install Tools",
+	Long:  `Install Tools`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {
+		if printVersion && len(args) == 0 {
+			fmt.Printf("version: %s\n", version.NewToolsVersion()["version"])
+			fmt.Println(version.NewToolsVersion()["goVersion"])
+			fmt.Printf("GitHash: %s\n", version.NewToolsVersion()["build"])
+			fmt.Printf("Build Time: %s\n", version.NewToolsVersion()["buildTime"])
+		} else if len(args) == 0 {
+			fmt.Println(`Use "installTools --help" or "installTools -h" for more information about a command.`)
+		}
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -61,7 +69,7 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.Flags().BoolVarP(&printVersion, "version", "v", false, "Print the version of installTools")
 }
 
 // initConfig reads in config file and ENV variables if set.

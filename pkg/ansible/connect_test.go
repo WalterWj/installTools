@@ -12,7 +12,7 @@ func TestConnectPrivateKey(t *testing.T) {
 	s := new(ansible.SshConfig)
 	s.Init()
 	s.PrivateKey = "id_rsa.test"
-	s.SshIp = "172.16.201.210"
+	s.SshIp = "127.0.0.1"
 	s.SshUser = "tidb"
 	fmt.Println(s)
 	client := s.ConnectPrivateKey()

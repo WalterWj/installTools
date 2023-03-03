@@ -9,11 +9,15 @@ import (
 )
 
 func TestConnectPrivateKey(t *testing.T) {
-	s := new(ansible.SshConfig)
-	s.Init()
-	s.PrivateKey = "id_rsa.test"
-	s.SshIp = "127.0.0.1"
+	// s := ansible.SshConfig{
+	// 	SshUser:    "tidb",
+	// 	SshPort:    22,
+	// 	SshIp:      "127.0.0.1",
+	// 	PrivateKey: "id_rsa.test",
+	// }
+	s := ansible.InitSshConfig()
 	s.SshUser = "tidb"
+	s.PrivateKey = "id_rsa.test"
 	fmt.Println(s)
 	client := s.ConnectPrivateKey()
 	// defer client.Close()

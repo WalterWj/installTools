@@ -18,18 +18,19 @@ type SshConfig struct {
 }
 
 // init struct SshConfig default
-func (s *SshConfig) Init() {
-	s.TimeOut = 5
-	s.PrivateKey = "~/.installTools/ssh/id_rsa"
-	s.SshUser = "root"
-	s.SshPort = 22
-	s.SshPassword = ""
-	s.SshIp = "127.0.0.1"
+func InitSshConfig() *SshConfig {
+	return &SshConfig{
+		TimeOut:     5,
+		PrivateKey:  "~/.installTools/ssh/id_rsa",
+		SshUser:     "root",
+		SshPort:     22,
+		SshPassword: "",
+		SshIp:       "127.0.0.1",
+	}
 }
 
 // Ssh by PrivateKey
 func (s *SshConfig) ConnectPrivateKey() *ssh.Client {
-	// s.Init()
 	// Load the private key
 	privateKey, err := os.ReadFile(s.PrivateKey)
 	if err != nil {
@@ -55,13 +56,12 @@ func (s *SshConfig) ConnectPrivateKey() *ssh.Client {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// defer client.Close()
+
 	return client
 }
 
 // Ssh by password
 func (s *SshConfig) ConnectPassword() *ssh.Client {
-	// s.Init()
 	// Set up the config
 	config := &ssh.ClientConfig{
 		User: s.SshUser,
@@ -77,6 +77,6 @@ func (s *SshConfig) ConnectPassword() *ssh.Client {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// defer client.Close()
+
 	return client
 }
